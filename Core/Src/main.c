@@ -109,18 +109,39 @@ int main(void) {
 //					(uint8_t*) (&spi_buffer_transmit),
 //					(uint8_t*) (&spi_buffer_receive), 4);
 //		}
-		transmit[0] = 500;
-		transmit[1] = 1500;
-		transmit[2] = 2500;
-		transmit[3] = 3500;
-		transmit[4] = 4500;
-		transmit[5] = 5500;
-		counter++;
-		if (counter > 500) {
-			HAL_SPI_TransmitReceive_IT(&hspi1,
-					(uint8_t*) (&transmit),
-					(uint8_t*) (&receive), 24);
+		transmit[0] = 10 + rand()%10;
+		transmit[1] = 20 + rand()%10;
+		transmit[2] = 30 + rand()%10;
+		transmit[3] = 40 + rand()%10;
+		transmit[4] = 50 + rand()%10;
+		transmit[5] = 60 + rand()%10;
+
+		if (HAL_GPIO_ReadPin(SPI_NSS_GPIO_Port, SPI_NSS_Pin) == 1) {
+			HAL_SPI_TransmitReceive(&hspi1, (uint8_t*) (transmit),
+					(uint8_t*) (receive), 24,100);
+			while (HAL_GPIO_ReadPin(SPI_NSS_GPIO_Port, SPI_NSS_Pin) == 1) {
+				HAL_Delay(1);
+			}
 		}
+//		if (HAL_GPIO_ReadPin(SPI_NSS_GPIO_Port, SPI_NSS_Pin) == 1){
+//			HAL_SPI_TransmitReceive(&hspi1, (uint8_t*) (transmit),
+//					(uint8_t*) (receive), 24);
+//		}
+//		if (HAL_GPIO_ReadPin(SPI_NSS_GPIO_Port, SPI_NSS_Pin) == 0){
+//			HAL_SPI_Abort(&hspi1);
+//		}
+//		if (SPI2->SR & SPI_SR_TXE){
+//			HAL_SPI_TransmitReceive_IT(&hspi1, (uint8_t*) (transmit),
+//					(uint8_t*) (receive), 24);
+//		}
+////		if (counter > 900) {
+//			HAL_SPI_TransmitReceive_IT(&hspi1,
+//					(uint8_t*) (transmit),
+//					(uint8_t*) (receive), 24);
+//		}
+//		HAL_SPI_TransmitReceive_IT(&hspi1,
+//						(uint8_t*) (transmit),
+//						(uint8_t*) (receive), 24);
 
 		/* USER CODE END WHILE */
 
